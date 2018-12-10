@@ -1,0 +1,391 @@
+﻿    Private Sub dsdsd()
+
+        GL.ClearColor(Color.White)
+        GL.Clear(ClearBufferMask.ColorBufferBit)
+        GL.LoadMatrix(world)
+        GL.MatrixMode(MatrixMode.Modelview)
+        GL.Enable(EnableCap.Blend)
+        GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha)
+
+        gameRenderer.drawList(world)
+
+        ' gameRenderer.drawImg(dd, My.Resources.battle_background_help_1_by_faria4_d4i6gca.Size)
+        GL.Translate(210.0, 190, 0)
+        Dim healthbar, magicbar As Vector3
+        healthbar.Y = 10
+        magicbar.Y = 10
+
+        For i = 0 To 2
+            With rpg.playClass(i).activeStat
+                healthbar.X = .hpCurrent / .hp * 64
+                magicbar.X = .mpCurrent / .mp * 64
+            End With
+            Dim str = ""
+
+
+            GL.PushAttrib(AttribMask.AllAttribBits)
+
+            If startHeal = True And i = charToHeal Then
+                gameRenderer.drawRect(Color.LightBlue, New Vector3(64, 64, 0))
+            End If
+
+            GL.Translate(0, 30, 0)
+
+            If startHeal = True And i = 0 Then
+                str += rpg.playClass(i).getCurrentActionSkillName
+                str += " " + rpg.playClass(charToHeal).name
+                rpg.playClass(i).previousAction = str
+
+            Else
+                str += rpg.playClass(i).getCurrentActionSkillName
+            End If
+
+
+            pppp = gameRenderer.loadimg2(gameRenderer.createString(rpg.playClass(i).previousAction, New Font("Arial", 25), Color.Black, fontSize))
+            drawImg(pppp, New Size(40, 10))
+            GL.Translate(0, -30, 0)
+
+            GL.Translate(-50, 0, 0)
+            GL.Translate(15, -20, 0)
+            pppp = loadimg2(gameRenderer.createString(rpg.playClass(i).name, New Font("Arial", 25), Color.Black, fontSize))
+            gameRenderer.drawImg(pppp, New Size(40, 10))
+            GL.Translate(-15, 20, 0)
+            gameRenderer.drawRect(Color.Red, New Vector3(healthbar))
+            GL.Translate(0, 10, 0)
+            gameRenderer.drawRect(Color.Blue, New Vector3(magicbar))
+            GL.Translate(0, 20, 0)
+            GL.PopAttrib()
+
+            '   Dim a = loadimg2(rpg.textimages(0))
+            '   drawImg(a, My.Resources.battle_background_help_1_by_faria4_d4i6gca.Size, My.Resources.battle_background_help_1_by_faria4_d4i6gca.Size)
+            GL.Translate(-5, -20, 0)
+            If i <> 2 Then
+                GL.Scale(-1, 1, 1)
+                If i = 1 Then
+                    rpg.playClass(i).sprAnim(rpg.playClass(i).activeStat.runningAction).Anim.draw_image(New Size(82, 82))
+
+                Else
+                    rpg.playClass(i).sprAnim(rpg.playClass(i).activeStat.runningAction).Anim.draw_image(New Size(62, 62))
+                End If
+                GL.Scale(-1, 1, 1)
+            Else
+                GL.Translate(0, 20, 0)
+                rpg.playClass(i).sprAnim(rpg.playClass(i).activeStat.runningAction).Anim.draw_image(New Size(46, 46))
+            End If
+
+            GL.Translate(0, 84, 0)
+        Next
+
+        GL.Translate(0, 30, 0)
+        GL.Translate(px, py, 0)
+        If isMove = mov.left Then
+            GL.Scale(1, 1, 0)
+        ElseIf isMove = mov.right Then
+            GL.Scale(-1, 1, 0)
+        ElseIf isMove = mov.none Then
+            currentFrame = 0
+        End If
+
+        ' drawImg(megaMan, )
+
+        GL.LoadMatrix(world)
+        GL.Translate(490, 190, 0)
+
+        GL.Scale(-2, 2, 1)
+
+        With rpg.mobs(currentmob)
+            GL.PushAttrib(AttribMask.AllAttribBits)
+            gameRenderer.drawRect(Color.Red, New Vector3(.activeStat.hpCurrent / .activeStat.hp * 100, 10, 0))
+            GL.PopAttrib()
+            GL.Translate(-10, 40, 0)
+            .sprAnim(.activeStat.runningAction).Anim.draw_image()
+        End With
+
+
+        GL.Viewport(New Rectangle(tt, ff, Me.Width, Me.Height))
+        GL.ShadeModel(ShadingModel.Smooth)
+        '   GL.TexCoordPointer(2, VertexPointerType.Float, BlittableValueType.StrideOf(vertices), pvertices + sizeof(Vector3));
+        '   GL.DrawArrays(BeginMode.Triangles, 0, vertices.Length);
+        GL.Finish() '// Force OpenGL to finish rendering while the arrays are still pinned
+        Me.SwapBuffers()
+        ' MyBase.OnRenderFrame(e)
+    End Sub
+
+    Private Sub drawRect(col As Color, size As Vector3, alpha As Single)
+        GL.Begin(PrimitiveType.Quads)
+        GL.Color4(col.R, col.G, col.B, alpha)
+        GL.Vertex2(0, 0)
+        GL.Vertex2(size.X, 0)
+        GL.Vertex2(size.X, size.Y)
+        GL.Vertex2(0, size.Y)
+        GL.End()
+    End Sub
+
+    Private Sub drawRect(col As Color, size As Vector3)
+        drawRect(col, size, 0.5)
+    End Sub
+
+    Private Sub drawTrig()
+        GL.Begin(PrimitiveType.Triangles)
+        GL.Color3(Color.MidnightBlue)
+        GL.Vertex2(-20, 20)
+        'GL.Vertex2(-1.0F, 1.0F)
+        GL.Color3(Color.SpringGreen)
+        GL.Vertex2(0, -20)
+        'GL.Vertex2(0.0F, -1.0F)
+        GL.Color3(Color.Ivory)
+        GL.Vertex2(20, 20)
+        'GL.Vertex2(1.0F, 1.0F)
+        GL.End()
+    End Sub
+
+    Private Sub drawImg(picpointer As Integer, rectsize As Size)
+        GL.Enable(EnableCap.Texture2D)
+        GL.BindTexture(TextureTarget.Texture2D, picpointer)
+        '    GL.Scale(0.4F, 0.5F, 1.0F)
+        'GL.Translate(100 * Math.Sin(x * Math.PI / 180), 100 * Math.Cos(x * Math.PI / 180), 0)
+        GL.Begin(PrimitiveType.Quads)
+        Dim pSrc As RectangleF = New RectangleF(0.0, 0.0, 1.0, 1.0)
+        Dim rect As Rectangle = New Rectangle(rectsize.Width, rectsize.Height, rectsize.Width, rectsize.Height)
+
+
+        ' GL.Vertex2(-1.0F, 1.0F)
+        GL.TexCoord2(pSrc.Left + pSrc.Width, pSrc.Top)
+        GL.Vertex2(rect.Left + rect.Width, rect.Top - rect.Height)
+        GL.TexCoord2(pSrc.Left + pSrc.Width, pSrc.Top + pSrc.Height)
+
+        'GL.Vertex2(-1.0F, -1.0F)
+        GL.Vertex2(rect.Left + rect.Width, rect.Top + rect.Height)
+        GL.TexCoord2(pSrc.Left, pSrc.Top + pSrc.Height)
+        '  GL.Vertex2(1.0F, -1.0F)
+        GL.Vertex2(rect.Left - rect.Width, rect.Top + rect.Height)
+        GL.TexCoord2(pSrc.Left, pSrc.Top)
+        '  GL.Vertex2(1.0F, 1.0F)
+        GL.Vertex2(rect.Left - rect.Width, rect.Top - rect.Height)
+        GL.End()
+        GL.Disable(EnableCap.Texture2D)
+
+    End Sub
+
+    Private Sub drawImg(picpointer As Integer)
+        drawImg(picpointer, New Size(32, 32))
+    End Sub
+
+    Private Function loadImg(img As Image) As Integer
+        Dim bit As Bitmap = New Bitmap(img)
+
+        Dim tex As Integer
+
+        GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest)
+
+        GL.GenTextures(1, tex)
+        GL.BindTexture(TextureTarget.Texture2D, tex)
+
+        Dim Datas = bit.LockBits(New System.Drawing.Rectangle(0, 0, bit.Width, bit.Height), Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+
+        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 64, 64, 0, OpenTK.Graphics.OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, Datas.Scan0)
+        bit.UnlockBits(Datas)
+
+
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, CInt(TextureMinFilter.Linear))
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, CInt(TextureMagFilter.Linear))
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, CInt(TextureWrapMode.Repeat))
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, CInt(TextureWrapMode.Repeat))
+
+        Return tex
+
+    End Function
+
+    Private Function loadimg2(img As Image)
+
+        Dim id As Integer = GL.GenTexture()
+        GL.BindTexture(TextureTarget.Texture2D, id)
+        Dim bmp As Bitmap = New Bitmap(img)
+        Dim bmp_data = bmp.LockBits(New Rectangle(0, 0, bmp.Width, bmp.Height), Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0)
+        bmp.UnlockBits(bmp_data)
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, CInt(TextureMinFilter.Linear))
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, CInt(TextureMagFilter.Linear))
+
+        Return id
+    End Function
+
+	    Private Sub moving()
+        If isMove <> mov.none Then
+            ' If isMove = mov.left Then
+            'px -= 3
+            'End If
+            'If isMove = mov.right Then
+            'px += 3
+            'End If
+            If time > 16 * 5 Then
+                time = 0
+                currentFrame += 1
+                If currentFrame >= 6 Then
+                    currentFrame = 3
+                End If
+            End If
+        Else
+            If time > 16 * 50 Then
+                time = 0
+                currentFrame += 1
+                If currentFrame >= 2 Then
+                    currentFrame = 0
+                End If
+            End If
+        End If
+
+    End Sub
+
+	    Public Function getCurrentFrameRect() As RectangleF
+        Dim frameindex = sprAnim(activeStat.runningAction).Anim.frameCurrent
+        Dim spritesheet = sprAnim(activeStat.runningAction).Anim.spriteSheet
+        Dim framesize = sprAnim(activeStat.runningAction).Anim.frameSize
+        Dim spriteRow = sprAnim(activeStat.runningAction).Anim.spriteRow
+        Return New RectangleF(frameindex * framesize.Width / spritesheet.Size.Width, spriteRow * framesize.Height / spritesheet.Size.Height, framesize.Width / spritesheet.Size.Width, framesize.Height / spritesheet.Size.Height)
+    End Function
+
+    Public Function getCurrentActionSkillName() As String
+        With Me.activeStat
+            If .currentAction = action.basicAtk Or .currentAction = action.powAtk Or .currentAction = action.special Then
+                previousAction = .skill(.currentAction - 1).name
+            Else
+
+            End If
+        End With
+        Return previousAction
+    End Function
+
+	
+                With rpg.mobs(currentmob).activeStat
+
+                    If .currentAction = action.basicAtk Then
+
+                        Dim currentplayer = CType(r.Next(0, 3), classType)
+
+                        With rpg.playClass(currentplayer)
+                            '   player = Rnd() * 100
+                            chance = CInt(.baseStat.attr(Attr.Agi) * 100 / 30)
+                            def = 1 - .baseStat.attr(Attr.Def) / (rpg.mobs(currentmob).activeStat.dam + 5)
+                            .activeStat.hpNext -= CInt(rpg.mobs(currentmob).activeStat.dam * def)
+                        End With
+
+
+                    ElseIf .currentAction = action.powAtk Then
+
+                        For i = 0 To 2
+                            With rpg.playClass(i)
+                                '  player = Rnd() * 100
+                                chance = CInt(.baseStat.attr(Attr.Agi) * 100 / 30)
+                                def = 1 - .baseStat.attr(Attr.Def) / (rpg.mobs(currentmob).activeStat.dam + 5)
+                                .activeStat.hpNext -= CInt(rpg.mobs(currentmob).activeStat.dam * def / 3)
+                                '  rpg.playClass(i).activeStat.hpNext -= CInt((rpg.mobs(currentmob).activeStat.dam * def) * 0.4)
+                            End With
+
+                        Next
+                    ElseIf .currentAction = action.special Then
+
+                    End If
+
+                End With
+
+				
+        For i = 0 To 2
+            For j = 0 To 3
+                rpg.playClass(i).sprAnim(j) = New sprAnimation(My.Resources.spritesheetmegaman1, New Size(64, 64))
+
+                If j = 0 Then
+                    rpg.playClass(i).sprAnim(j).Anim.spriteRow = 0
+                    rpg.playClass(i).sprAnim(j).Anim.frameStart = 0
+                    rpg.playClass(i).sprAnim(j).Anim.frameStop = 2
+                ElseIf j = 1 Then
+                    rpg.playClass(i).sprAnim(j).Anim.spriteRow = 1
+                    rpg.playClass(i).sprAnim(j).Anim.frameStart = 1
+                    rpg.playClass(i).sprAnim(j).Anim.frameStop = 3
+                ElseIf j = 2 Then
+                    rpg.playClass(i).sprAnim(j).Anim.spriteRow = 1
+                    rpg.playClass(i).sprAnim(j).Anim.frameStart = 0
+                    rpg.playClass(i).sprAnim(j).Anim.frameStop = 5
+                ElseIf j = 3 Then
+                    rpg.playClass(i).sprAnim(j).Anim.spriteRow = 0
+                    rpg.playClass(i).sprAnim(j).Anim.frameStart = 2
+                    rpg.playClass(i).sprAnim(j).Anim.frameStop = 8
+                End If
+
+            Next
+
+            For j = 0 To 1
+                rpg.playClass(i).sprAnim.Add(New sprAnimation(My.Resources.spritesheetmegaman1, New Size(64, 64)))
+            Next
+
+            With rpg.playClass(i)
+                With .sprAnim(4).Anim
+                    .spriteRow = 0
+                    .frameStart = 7
+                    .frameStop = 7
+                End With
+
+                With .sprAnim(5).Anim
+                    .spriteRow = 2
+                    .frameStop = 0
+                    .frameStart = 0
+                End With
+
+            End With
+
+        Next
+
+        Dim enumm = Alc.IsExtensionPresent(Nothing, "ALC_ENUMERATION_EXT")
+
+        'setup sound for background music
+        Alc.MakeContextCurrent(acontext)
+        Dim f As FileStream = New FileStream("Content\audio.wav", FileMode.Open)
+        Dim br As BinaryReader = New BinaryReader(f)
+        Dim chunkid = ASCII.GetString(br.ReadBytes(4))
+        Dim chunksize = br.ReadBytes(4)
+        Dim format = ASCII.GetString(br.ReadBytes(4))
+        Dim subchuckid = ASCII.GetString(br.ReadBytes(4))
+        Dim subchucksize = br.ReadBytes(4)
+        Dim audioformat = br.ReadBytes(2)
+        Dim numchannels = br.ReadInt16
+        Dim samplerate = br.ReadInt32
+        Dim byterate = br.ReadBytes(4)
+        Dim blockalign = br.ReadBytes(2)
+        Dim bitspersample = br.ReadBytes(2)
+        Dim subchuck2id = br.ReadBytes(4)
+        Dim subchuck2size = br.ReadBytes(4)
+
+        Dim alformat As ALFormat
+
+        If numchannels = 1 Then
+            alformat = alformat.Mono16
+        Else
+            alformat = alformat.Stereo16
+        End If
+
+        Dim abuf(br.BaseStream.Length - 44) As Byte
+        abuf = br.ReadBytes(br.BaseStream.Length - 44)
+
+        br.Close()
+
+        Dim arbuf = abuf.ToArray
+
+        AL.GenSource(bgmusic)
+        Dim mbuf As Integer = AL.GenBuffer()
+
+
+        AL.BufferData(mbuf, alformat, arbuf, arbuf.Length, samplerate)
+        AL.Source(bgmusic, ALSourcei.Buffer, mbuf)
+
+        AL.Source(bgmusic, ALSource3f.Position, New Vector3(0, 0, 0))
+        AL.Source(bgmusic, ALSource3f.Velocity, New Vector3(0, 0, 0))
+        AL.Source(bgmusic, ALSource3f.Direction, New Vector3(0, 0, 1))
+        AL.Source(bgmusic, ALSourceb.Looping, True)
+        AL.Source(bgmusic, ALSourcef.Gain, 1)
+        AL.Source(bgmusic, ALSourcef.Pitch, 1)
+
+        AL.Listener(ALListener3f.Position, New Vector3(0, 0, 1))
+        AL.Listener(ALListener3f.Velocity, New Vector3(0, 0, 0))
+        AL.Listener(ALListenerf.Gain, 1)
+        Dim idd() As Single = New Single() {0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F}
+        AL.Listener(ALListenerfv.Orientation, idd)

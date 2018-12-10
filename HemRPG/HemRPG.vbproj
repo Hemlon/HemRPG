@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{026CB0AD-8B85-4AB7-8841-9A4F5C840F35}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>HemRPG.My.MyApplication</StartupObject>
+    <RootNamespace>HemRPG</RootNamespace>
+    <AssemblyName>HemRPG</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>HemRPG.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>HemRPG.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ArcadeGame.vb" />
+    <Compile Include="Audio\AudioAL.vb" />
+    <Compile Include="physicsEngine.vb" />
+    <Compile Include="Windows\BattleWindow.vb" />
+    <Compile Include="Audio\gameAudioAL.vb" />
+    <Compile Include="GameObjects\Projectile.vb" />
+    <Compile Include="Graphics\Render.vb" />
+    <Compile Include="Graphics\gameRenderer.vb" />
+    <Compile Include="GameObjects\gameMobObject.vb" />
+    <Compile Include="Audio\AudioSource.vb" />
+    <Compile Include="rpg.Designer.vb">
+      <DependentUpon>rpg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="rpg.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\rectControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="rpgEngine.vb" />
+    <Compile Include="FileInput\gameFileReader.vb" />
+    <Compile Include="GameObjects\gameItemObject.vb" />
+    <Compile Include="GameObjects\gamePlayerObject.vb" />
+    <Compile Include="GameObjects\gameObjectStat.vb" />
+    <Compile Include="GameObjects\gameObject.vb" />
+    <Compile Include="GameObjects\SpriteAnimation.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Windows\SetUpWindow.Designer.vb">
+      <DependentUpon>SetUpWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SetUpWindow.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Windows\rectControl.resx">
+      <DependentUpon>rectControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="rpg.resx">
+      <DependentUpon>rpg.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\SetUpWindow.resx">
+      <DependentUpon>SetUpWindow.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\namePlate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mageAvatar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\itemSlot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tab.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CharTab.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MageTab.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Unused.txt" />
+    <None Include="Resources\archAvatar.png" />
+    <Content Include="Resources\archTab.png" />
+    <None Include="Resources\warAvatar.png" />
+    <None Include="Resources\warTab1.png" />
+    <None Include="Resources\archTab1.png" />
+    <None Include="Resources\spritesheetmegaman1.png" />
+    <None Include="Resources\dragon.png" />
+    <None Include="Resources\mage.png" />
+    <None Include="Resources\warrior.png" />
+    <None Include="Resources\battle_background_help_1_by_faria4-d4i6gca.jpg" />
+    <Content Include="Resources\warTab.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
